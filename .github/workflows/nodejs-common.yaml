@@ -79,4 +79,5 @@ jobs:
           kubectl get nodes
       - name: deploy to EKS
         run: |
-          helm upgrade --install ${{ inputs.component}} -f values-dev.yaml --set deployment.imageVersion="$appVersion"
+          helm upgrade --install ${{ inputs.component}} -f values-dev.yaml --set deployment.imageVersion="$appVersion" .
+          
