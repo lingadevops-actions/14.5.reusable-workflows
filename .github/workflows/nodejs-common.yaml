@@ -52,29 +52,29 @@ jobs:
           --password-stdin 805778285734.dkr.ecr.us-east-1.amazonaws.com
 
           docker push 805778285734.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.project }}/${{ inputs.component }}:${{ steps.package-version.outputs.version }}
-cd:
-  runs-on: self-hosted
-  needs: ci
-  env:
-    appVersion: ${{ needs.ci.outputs.appVersion }}
-  steps:
-    - name: checkout deploy repo
-      uses: actions/checkout@v5
-      with:
-        repository: lingadevops-actions/14.7.catalogue-deploy
-    - name: check the files
-      run: ls -l
-    - name: configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v5.0.0
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws_secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws_region: us-east-1
-    - name: authenticate to EKS
-      run: |
-        aws eks update-kubeconfig --region us-east-1 -- name roboshop-dev
-        kubectl get nodes
-    - name: deploy to EKS
-      run: |
-        helm upgrade --install ${{ inputs.component}} -f values-dev.yaml --set
-        deployment.imageVersion="$appVersion"
+  cd:
+    runs-on: self-hosted
+    needs: ci
+    env:
+      appVersion: ${{ needs.ci.outputs.appVersion }}
+    steps:
+      - name: checkout deploy repo
+        uses: actions/checkout@v5
+        with:
+          repository: lingadevops-actions/14.7.catalogue-deploy
+      - name: check the files
+        run: ls -l
+      - name: configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5.0.0
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-east-1
+      - name: authenticate to EKS
+        run: |
+          aws eks update-kubeconfig --region us-east-1 -- name roboshop-dev
+          kubectl get nodes
+      - name: deploy to EKS
+        run: |
+          helm upgrade --install ${{ inputs.component}} -f values-dev.yaml --set
+          deployment.imageVersion="$appVersion"
