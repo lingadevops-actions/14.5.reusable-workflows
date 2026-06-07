@@ -77,7 +77,9 @@ jobs:
         run: |
           aws eks update-kubeconfig --region us-east-1 --name roboshop-dev
           kubectl get nodes
+      - name: create namespace
+        run: kubectl create namespace roboshop --dry-run=client -o yaml | kubectl apply -f -
       - name: deploy to EKS
         run: |
           helm upgrade --install ${{ inputs.component}} -f values-dev.yaml --set deployment.imageVersion="$appVersion" .
-          
+
