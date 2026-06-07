@@ -82,4 +82,5 @@ jobs:
       - name: deploy to EKS
         run: |
           helm upgrade --install ${{ inputs.component}} -f values-dev.yaml --set deployment.imageVersion="$appVersion" .
+          kubectl get pods
 
