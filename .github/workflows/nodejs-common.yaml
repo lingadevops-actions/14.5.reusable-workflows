@@ -25,6 +25,12 @@ jobs:
     steps:
       - name: checkout Code
         uses: actions/checkout@v5
+      - name: install jq
+        run:  jq install
+      - name: Install jq
+        run: sudo dnf install -y jq
+      - name: Check jq
+        run: jq --version
       - name: check the files
         run: ls -l
       - name: print inputs
